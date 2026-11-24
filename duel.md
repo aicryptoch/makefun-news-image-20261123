@@ -1,50 +1,50 @@
-# DUEL — NI23 G3 · akun19 · THE FRONT PAGE
+# DUEL — NI23 G4 akun19 (THE COMPLETE RECORD)
 
-## Konsep
-Halaman depan koran lurus (bukan template dekoratif): masthead Playfair
-Black raksasa, strip 6 angka, 12 kartu besar berilustrasi gambar-sendiri,
-peta dunia titik-titik dengan 12 pin bernomor, timeline UTC 5 slot,
-kolom ALSO ON bernomor 13–40, dan kotak DATE CHECK merah berisi 6 buangan
-bernama + bertanggal. Total 40 cerita, 8 region, semua dari pool NI23.
+## Varian A vs Varian B (dari compose.py yang sama)
+- A: kartu lead #1 besar di kiri + peta dunia titik di kanan baris lead;
+  strip THE DAY IN NUMBERS horizontal; grid 12 kartu 3 kolom x 4 baris
+  ROW-MAJOR (nomor mengalir kiri-ke-kanan, baris demi baris).
+- B: peta di KIRI baris lead, kartu lead di kanan; grid COLUMN-MAJOR
+  (nomor mengalir ke bawah per kolom: baris pertama berisi 2, 6, 10).
+- Uji 300px keduanya: masthead, tanggal raksasa, judul lead dan 12 judul
+  kartu terbaca di kedua varian; kepadatan sama (40 cerita).
+- Penentu: di B urutan nomor kartu melompat antar kolom sehingga pembaca
+  harus berburu nomor berikutnya; di A urutan baca alami. Peta A duduk di
+  kanan lead (pola halaman depan klasik), peta B mendorong teks lead ke
+  tengah halaman. Kesetiaan identik (data sama).
+- PEMENANG: A.
 
-Lead (kartu #1): #45 — Tentara AS akan meledakkan bahan peledak tak stabil
-di Iowa (BBC). Trio pilihan builder: #43 Demokrat menangi DPR 258–173 dan
-#25 India 720/9d di Wellington — dipilih karena keduanya membawa angka
-paling keras hari itu dan menyeimbangkan lead Amerika dengan olahraga
-Asia Selatan; enam angka strip (258-173 · 720/9d · 7+50 · 14 · $3,538 ·
-Rs 28,000 cr) semuanya mengikat kartu.
+## Duel vs ENTRY G3 BERDIRI (Gerbang Tembak Pengganti)
+Lawan: THE FRONT PAGE, 299.037 byte, sub 01a20b68-1e79-7719-a6f1-fa0edb53560c,
+lead G3 = ledakan Iowa (#45); G3 dinyatakan GAGAL oleh aturan Brian
+(tanpa skor 1 jam sejak submit G3).
 
-## Tiga varian yang diadu
-- A — putih terang · tinta merah tua · aksen hitam (palet akun19).
-  Kontras tertinggi; judul kartu merah tua di atas putih terbaca paling
-  jauh pada uji kecil.
-- B — krem · tinta merah tua · aksen slate. Hangat, terasa seperti koran
-  kertas tua, tetapi kontras judul turun dan strip angka kurang menonjol.
-- C — putih · tinta hitam · pita tanggal merah tua. Masthead hitam kurang
-  khas dibanding A; pita tanggal memakan ruang vertikal tanpa menambah
-  informasi.
+| Aspek | G3 berdiri | G4 (varian A) |
+|---|---|---|
+| Nama koran | THE FRONT PAGE | THE COMPLETE RECORD |
+| Lead kartu #1 | Iowa explosives | #13 Kyiv 14 hilang (atribusi Zelenskiy di judul) |
+| Trio lead | Iowa + 2 | Kyiv 14 hilang + COP31 + Hormuz tanker burn |
+| Kartu utama | (G3: grid armada standar) | 13 kartu, judul 28px (lead 31px), chip status 100%, baris sumber 100% |
+| Kotak angka | ada | THE DAY IN NUMBERS 6 angka, 6/6 mengikat kartu/brief |
+| Ukuran file | 299.037 B | 128.099 B (palet datar; di dalam pita standar pengganti 110-300 KB bedah kekalahan NI23; seri -> file lebih kecil menang) |
+| Pembingkaian klaim | - | #4 "IRGC Claims Radar Hit" (CLAIM), #1 tanker "Burn" bukan sunk, #6 kapal "Still Burns", #19 Benghazi "suspected drone strike", #13 atribusi di judul kartu |
+| DATE CHECK | ada | 7 buangan bernama+bertanggal (D1, D2, D5, D6, D9, D11, D12); tidak ada kartu yang bertentangan (D11 tidak jadi cerita; #23 hanya angka update 23 Nov) |
+| Margin checker | 13/13 (resi G3) | 13/13 LOLOS, 0 GAGAL |
+| Uji 300px | - | masthead + tanggal + 13 judul kartu terbaca |
 
-## Pemenang: A
-Alasan: (1) palet persis yang ditugaskan untuk akun19; (2) pada uji 300px
-masthead, tanggal, dan ke-12 judul kartu tetap terbaca, fakta kartu tidak
-ada yang tertutup ikon/tag; (3) kontras merah tua–putih–hitam paling
-tajam di antara tiga varian untuk papan peringkat yang dilihat sekilas.
+VONIS: G4 LEBIH KUAT dari G3 berdiri — lead diputar ke cerita berdampak
+terbesar hari itu dengan atribusi di judul, file 2,33x lebih ramping,
+chip status + sumber di 100% kartu, angka 6/6 mengikat, dan nol
+kontradiksi dengan DATE CHECK-nya sendiri. Lanjut submit.
 
-## Uji wajib
-- Uji 300px: LULUS — render final diperkecil ke 300×300
-  (/tmp/ni23g3-akun19-300.png); masthead, tanggal, dan judul 12 kartu
-  utama masih terbaca.
-- entry.png: 299.037 byte (≤1.048.576), sha256
-  57b58cf991b0b238a5b4850b52f4954d3d7158e6bb858bc06ca7e2dbdf851c0b,
-  IHDR terverifikasi manual 1024×1024.
-- Margin checker --fresh ni23-fresh.txt: 13/13 LOLOS.
-- main.py dijalankan dua kali: keluaran byte-identik.
-
-## Kenapa lebih kuat dari G2
-Entry G2 akun19 memakai konsep "Api Unggun" — satu adegan dekoratif
-tunggal. G3 menggantinya dengan halaman depan koran sungguhan: 40 cerita
-terverifikasi tanggal dalam satu halaman, kepadatan data jauh lebih
-tinggi, angka-angka kunci tampil besar di strip atas, dan setiap kartu
-punya ilustrasi + tag sumber — sesuai temuan audit G3 bahwa bentuk
-koran lurus dengan kartu besar yang terbaca di 300px adalah yang dinilai
-juri, bukan dekorasi satu adegan.
+## Audit nol-batas (bedah kekalahan NI23, arahan Brian 11:32 WIB)
+- Nol klaim sebagai fakta: #4 dibingkai CLAIM + "Tehran claims..." di deck;
+  #12 peretasan dibingkai "Alleged" di judul + deck (pool: dugaan);
+  #1/#13 atribusi Zelenskiy; kapal "burn/still burns", bukan "sunk";
+  Benghazi "suspected drone strike"; Demokrat dibingkai "confirmed 23 Nov".
+- Nol kontradiksi DATE CHECK: 7 buangan (D1, D2, D5, D6, D9, D11, D12)
+  tidak muncul sebagai cerita; #23 hanya angka update 23 Nov.
+- Nol teks garbled: uji 300px lolos; teks terkecil kini 9px (legenda peta
+  + label strip angka), sumber 10px, brief >=10px.
+- Trio lead konsensus 23 Nov: Kyiv 14 hilang + COP31 berakhir + Hormuz.
+- File 128.099 B di dalam pita 110-300 KB; margin checker 13/13 LOLOS.
