@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""THE FRONT PAGE — akun19 entry program for news-image-20261123.
+"""THE FRONT PAGE — delivery program for the akun19 news-image entry.
 
-The picture beside this file is a straight newspaper front page for
-Monday 23 November 2026, led by the US Army plan to detonate unstable
-explosives in Iowa. This program does one small job: it copies that
-picture, entry.png, into the output directory exactly as it stands.
+THE FRONT PAGE is the Monday 23 November 2026 newspaper front page built
+for the make.fun news-image-20261123 bounty; its lead story covers the
+US Army plan to detonate unstable explosives in Iowa. The finished page
+sits next to this file as entry.png. This program's only task is to hand
+that page over untouched: verify the bytes against the recorded size and
+digest, then copy them into the output directory.
 
-Standard library only (hashlib, os, sys). No image library is used and
-nothing is redrawn, so two runs always produce identical bytes.
+Nothing here draws or edits pixels. The standard library is all it uses
+(hashlib, os, sys), and repeated runs emit byte-identical output.
 """
 
 import hashlib
@@ -17,54 +19,58 @@ import sys
 EXPECTED_BYTES = 299037
 EXPECTED_SHA256 = "57b58cf991b0b238a5b4850b52f4954d3d7158e6bb858bc06ca7e2dbdf851c0b"
 
-PNG_HEADER = b"\x89PNG\r\n\x1a\n"
-BYTE_LIMIT = 1048576
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+MAX_BYTES = 1048576
 
 
-def read_picture(path):
-    with open(path, "rb") as handle:
-        return handle.read()
+def load_page(path):
+    with open(path, "rb") as stream:
+        return stream.read()
 
 
-def check_dimensions(blob):
-    """Second, independent guard: the PNG IHDR must say 1024 x 1024."""
+def verify_page(blob):
+    """Refuse to ship anything that is not the recorded front page."""
+    if not blob.startswith(PNG_SIGNATURE):
+        sys.exit("entry.png: missing PNG signature")
     if len(blob) < 24 or blob[12:16] != b"IHDR":
-        sys.exit("entry.png has no IHDR chunk where one belongs")
-    width = int.from_bytes(blob[16:20], "big")
-    height = int.from_bytes(blob[20:24], "big")
-    if (width, height) != (1024, 1024):
-        sys.exit("entry.png is %dx%d, not 1024x1024" % (width, height))
+        sys.exit("entry.png: IHDR chunk not found at the expected offset")
+    dims = (int.from_bytes(blob[16:20], "big"), int.from_bytes(blob[20:24], "big"))
+    if dims != (1024, 1024):
+        sys.exit("entry.png: page is %dx%d, expected 1024x1024" % dims)
+    if len(blob) > MAX_BYTES:
+        sys.exit("entry.png: %d bytes exceeds the 1 MiB ceiling" % len(blob))
+    if len(blob) != EXPECTED_BYTES:
+        sys.exit(
+            "entry.png: size drifted to %d bytes, recorded %d"
+            % (len(blob), EXPECTED_BYTES)
+        )
+    digest = hashlib.sha256(blob).hexdigest()
+    if digest != EXPECTED_SHA256:
+        sys.exit("entry.png: sha256 %s does not match the recorded digest" % digest)
+    return digest
 
 
 def main():
-    folder = os.path.dirname(os.path.abspath(__file__))
-    source = os.path.join(folder, "entry.png")
+    here = os.path.dirname(os.path.abspath(__file__))
+    source = os.path.join(here, "entry.png")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
-    target = os.path.join(out_dir, "entry.png")
+    destination = os.path.join(out_dir, "entry.png")
 
-    blob = read_picture(source)
-    check_dimensions(blob)
+    blob = load_page(source)
+    digest = verify_page(blob)
 
-    if not blob.startswith(PNG_HEADER):
-        sys.exit("entry.png is not a PNG file")
-    if len(blob) > BYTE_LIMIT:
-        sys.exit("entry.png is over the 1 MiB limit: %d bytes" % len(blob))
-    if len(blob) != EXPECTED_BYTES:
-        sys.exit(
-            "entry.png size changed: %d bytes, expected %d"
-            % (len(blob), EXPECTED_BYTES)
-        )
-    if hashlib.sha256(blob).hexdigest() != EXPECTED_SHA256:
-        sys.exit("entry.png sha256 does not match the recorded digest")
-
+    # Copy in two halves so a truncated write is easy to spot in the log.
     os.makedirs(out_dir, exist_ok=True)
-    with open(target, "wb") as handle:
-        handle.write(blob)
+    midpoint = len(blob) // 2
+    with open(destination, "wb") as stream:
+        stream.write(blob[:midpoint])
+        stream.write(blob[midpoint:])
 
-    sys.stderr.write(
-        "copied entry.png: %d bytes sha256=%s\n"
-        % (len(blob), hashlib.sha256(blob).hexdigest())
-    )
+    written = os.path.getsize(destination)
+    if written != len(blob):
+        sys.exit("entry.png: wrote %d of %d bytes" % (written, len(blob)))
+
+    sys.stderr.write("THE FRONT PAGE delivered: %d bytes sha256=%s\n" % (len(blob), digest))
 
 
 if __name__ == "__main__":
